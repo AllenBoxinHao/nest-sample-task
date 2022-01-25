@@ -17,9 +17,9 @@ export class User {
   @Column()
   password: string;
 
-  // @Column()
-  // last_logged_in_at: string;
+  @Column()
+  last_logged_in_at?: string;
 
-  // @Column()
-  // lastest_jwt: string;
+  @Column({ default: false })
+  lastest_jwt?: string;
 }

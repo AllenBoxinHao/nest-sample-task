@@ -24,9 +24,13 @@ export class UsersService {
   }
 
   createUser(payload: User): Promise<User> {
-    const newUser = { ...payload };
+    const newUser = { last_logged_in_at: Date(), ...payload };
 
-    return this.usersRepository.save(newUser); // INSERT
+    try {
+      return this.usersRepository.save(newUser); // INSERT
+    } catch (err) {
+      throw err;
+    }
   }
 
   async updateUser(id: number, payload: User): Promise<User> {

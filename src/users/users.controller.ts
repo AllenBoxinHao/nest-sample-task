@@ -1,4 +1,5 @@
 import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { User } from './user.entity';
 import { UsersService } from './users.service';
 
@@ -6,13 +7,13 @@ import { UsersService } from './users.service';
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
+  // @Get()
+  // async getAll(): Promise<User[]> {
+  //   return this.userService.getAll();
+  // }
   @Get()
-  async getAll(): Promise<User[]> {
-    return this.userService.getAll();
-  }
-  @Get()
-  async getOneByName(@Body() firstName: string): Promise<User> {
-    return this.userService.findOne(firstName);
+  async getOne(@Body() email: string): Promise<User> {
+    return this.userService.findOne(email);
   }
 
   @Post()

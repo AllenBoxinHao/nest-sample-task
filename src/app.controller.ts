@@ -5,13 +5,12 @@ import {
   UseGuards,
   Request,
   Body,
-  BadRequestException,
 } from '@nestjs/common';
 import { AuthService } from './auth/auth.service';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
-import { LocalAuthGuard } from './auth/local-auth.guard';
 import { UsersService } from './users/users.service';
 import * as bcrypt from 'bcrypt';
+import { LocalAuthGuard } from './auth/local-auth.guard';
 
 @Controller()
 export class AppController {
@@ -37,36 +36,20 @@ export class AppController {
     });
   }
 
-  @Post('login')
-  async login(
-    @Body('email') email: string,
-    @Body('password') password: string,
-  ) {
-    const user = await this.usersService.findOne({ email });
-
-    if (!user) {
-      throw new BadRequestException('Invalid Credentials');
-    }
-    if (await bcrypt.compare(password, user.password)) {
-      throw new BadRequestException('Invalid Credentials');
-    }
-    return user;
+  @UseGuards(LocalAuthGuard)
+  @Post('auth/login')
+  async login(@Request() req) {
+    return req.user;
   }
 
-  // @UseGuards(LocalAuthGuard)
-  // @Post('auth/login')
-  // async login(@Request() req): Promise<any> {
-  //   return this.authService.login(req.user);
-  // }
+  @Get('public')
+  getPublic(@Request() req): string {
+    return req.user;
+  }
 
-  // @Get('public')
-  // getPublic(@Request() req): string {
-  //   return req.user;
-  // }
-
-  // @UseGuards(JwtAuthGuard)
-  // @Get('protected')
-  // getPrivate(@Request() req): string {
-  //   return req.user;
-  // }
+  @UseGuards(JwtAuthGuard)
+  @Get('protected')
+  getPrivate(@Request() req): string {
+    return req.user;
+  }
 }
