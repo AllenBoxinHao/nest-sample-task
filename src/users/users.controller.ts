@@ -15,11 +15,6 @@ export class UsersController {
     return this.userService.findOne(firstName);
   }
 
-  @Get('/:userId')
-  async getOneById(@Param('userId') userId: number): Promise<User> {
-    return this.userService.findOneById(userId);
-  }
-
   @Post()
   async createUser(@Body() body: User): Promise<User> {
     return this.userService.createUser(body);

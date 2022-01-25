@@ -13,20 +13,10 @@ export class UsersService {
     return this.usersRepository.find(); //SELECT * from user
   }
 
-  async findOne(firstName: string): Promise<any> {
+  async findOne(condition: any): Promise<any> {
     try {
-      const result = await this.usersRepository.findOneOrFail(firstName); // SELECT * from user WHERE;
+      const result = await this.usersRepository.findOneOrFail(condition); // SELECT * from user WHERE;
       return result;
-    } catch (err) {
-      //handle error
-      throw err;
-    }
-  }
-
-  async findOneById(id: number): Promise<User> {
-    try {
-      const user = await this.usersRepository.findOneOrFail(id); // SELECT * from user WHERE user.id === id;
-      return user;
     } catch (err) {
       //handle error
       throw err;
@@ -40,15 +30,15 @@ export class UsersService {
   }
 
   async updateUser(id: number, payload: User): Promise<User> {
-    let user = await this.findOneById(id);
+    let user = await this.findOne(id);
 
     user = { ...user, ...payload };
 
     return this.usersRepository.save(user); // UPDATE
   }
 
-  async deleteUser(id: number): Promise<User> {
-    const user = await this.findOneById(id);
+  async deleteUser(id: number): Promise<User[]> {
+    const user = await this.findOne(id);
 
     return this.usersRepository.remove(user);
   }
