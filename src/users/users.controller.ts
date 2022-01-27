@@ -1,5 +1,4 @@
 import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { User } from './user.entity';
 import { UsersService } from './users.service';
 
@@ -11,6 +10,7 @@ export class UsersController {
   // async getAll(): Promise<User[]> {
   //   return this.userService.getAll();
   // }
+
   @Get()
   async getOne(@Body() email: string): Promise<User> {
     return this.userService.findOne(email);
@@ -21,11 +21,11 @@ export class UsersController {
     return this.userService.createUser(body);
   }
 
-  @Put('/:userId')
-  async updateUser(
-    @Param('userId') userId: number,
-    @Body() body: User,
-  ): Promise<User> {
-    return this.userService.updateUser(userId, body);
-  }
+  // @Put('/:userId')
+  // async updateUser(
+  //   @Param('userId') userId: number,
+  //   @Body() body: User,
+  // ): Promise<User> {
+  //   return this.userService.updateUser(userId, body);
+  // }
 }

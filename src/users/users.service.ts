@@ -13,9 +13,9 @@ export class UsersService {
     return this.usersRepository.find(); //SELECT * from user
   }
 
-  async findOne(condition: any): Promise<any> {
+  async findOne(condition: any): Promise<any | undefined> {
     try {
-      const result = await this.usersRepository.findOneOrFail(condition); // SELECT * from user WHERE;
+      const result = await this.usersRepository.findOne(condition); // SELECT
       return result;
     } catch (err) {
       //handle error
@@ -33,17 +33,18 @@ export class UsersService {
     }
   }
 
-  async updateUser(id: number, payload: User): Promise<User> {
-    let user = await this.findOne(id);
-
-    user = { ...user, ...payload };
-
-    return this.usersRepository.save(user); // UPDATE
+  async updateUser(email: string, access_token: string, login_time: string) {
+    const updatedUser = {
+      lastest_jwt: access_token,
+      last_logged_in_at: login_time,
+    };
+    return this.usersRepository.update({ email }, updatedUser);
   }
 
-  async deleteUser(id: number): Promise<User[]> {
-    const user = await this.findOne(id);
-
-    return this.usersRepository.remove(user);
+  async deleteUserJwt(email: string) {
+    const deletedJwt = {
+      lastest_jwt: '0',
+    };
+    return this.usersRepository.update({ email }, deletedJwt);
   }
 }
